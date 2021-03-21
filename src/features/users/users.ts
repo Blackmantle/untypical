@@ -17,7 +17,10 @@ const usersSlice = createSlice({
     addUser: (state, action: PayloadAction<User>) => {
       const lastId = state.ids[state.ids.length - 1] || 0;
       const id = lastId as number + 1;
-      UsersAdapter.addOne(state, { id, isDeleted: false, ...action.payload });
+      UsersAdapter.addOne(state, { id, ...action.payload });
+    },
+    deleteUser: (state, action: PayloadAction<number>) => {
+      UsersAdapter.removeOne(state, action.payload);
     },
   },
 });

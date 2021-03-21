@@ -6,5 +6,4 @@ export type User = {
 
 export type UserData = User & {
   id: number;
-  isDeleted: boolean;
 };

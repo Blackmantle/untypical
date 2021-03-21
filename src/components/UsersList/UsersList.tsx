@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Typography,
 } from '@material-ui/core';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import AddIcon from '@material-ui/icons/Add';
@@ -24,17 +25,21 @@ function UsersList() {
   const users = useSelector(selectors.users);
   const dispatch = useDispatch();
 
-  function onDialogOpen() {
+  function openDialog() {
     setIsDialogOpen(true);
   }
 
-  function onDialogClose() {
+  function closeDialog() {
     setIsDialogOpen(false);
   }
 
-  const handleSubmit = (data: User) => {
+  const addUser = (data: User) => {
     dispatch(actions.addUser(data));
-    onDialogClose();
+    closeDialog();
+  };
+
+  const deleteUser = (id: number) => {
+    dispatch(actions.deleteUser(id));
   };
 
   return (
@@ -48,7 +53,7 @@ function UsersList() {
           variant="contained"
           color="primary"
           startIcon={<AddIcon />}
-          onClick={onDialogOpen}
+          onClick={openDialog}
         >
           Добавить пользователя
         </Button>
@@ -57,11 +62,11 @@ function UsersList() {
         <DialogTitle>Добавить пользователя</DialogTitle>
         <DialogContent>
           <Box pb={3}>
-            <UserForm onSubmit={handleSubmit} />
+            <UserForm onSubmit={addUser} />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button color="primary" onClick={onDialogClose}>Отмена</Button>
+          <Button color="primary" onClick={closeDialog}>Отмена</Button>
           <Button
             type="submit"
             form="userForm"
@@ -73,30 +78,32 @@ function UsersList() {
         </DialogActions>
       </Dialog>
       <Box mt={4}>
-        {users.map(({ id, name }) => (
-          <React.Fragment key={id}>
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              mt={2}
-            >
-              <Link
-                component={RouterLink}
-                to={`/id${id}`}
-                style={{ wordBreak: 'break-word' }}
+        {!users.length
+          ? <Typography align="center">Нет пользователей</Typography>
+          : users.map(({ id, name }) => (
+            <React.Fragment key={id}>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                mt={2}
               >
-                {name}
-              </Link>
-              <Tooltip title="Удалить">
-                <IconButton color="primary" onClick={() => {}}>
-                  <DeleteForeverIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
-            <Divider />
-          </React.Fragment>
-        ))}
+                <Link
+                  component={RouterLink}
+                  to={`/id${id}`}
+                  style={{ wordBreak: 'break-word' }}
+                >
+                  {name}
+                </Link>
+                <Tooltip title="Удалить">
+                  <IconButton color="primary" onClick={() => deleteUser(id)}>
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+              <Divider />
+            </React.Fragment>
+          ))}
       </Box>
     </Box>
   );
