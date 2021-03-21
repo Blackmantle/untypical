@@ -1,16 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import reportWebVitals from './reportWebVitals';
+import store from './store';
 import App from './App';
 import theme, { MuiThemeProvider, ThemeProvider, GlobalStyle } from './theme';
 
 ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <ThemeProvider theme={theme}>
-      <App />
-      <GlobalStyle />
-    </ThemeProvider>
-  </MuiThemeProvider>,
+  <Provider store={store}>
+    <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
+        <App />
+        <GlobalStyle />
+      </ThemeProvider>
+    </MuiThemeProvider>
+  </Provider>,
   document.getElementById('root'),
 );
 
