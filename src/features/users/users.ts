@@ -23,6 +23,10 @@ const usersSlice = createSlice({
     deleteUser: (state, action: PayloadAction<number>) => {
       UsersAdapter.removeOne(state, action.payload);
     },
+    changeUserData: (state, action: PayloadAction<UserData>) => {
+      const { id, ...changes } = action.payload;
+      UsersAdapter.updateOne(state, { id, changes });
+    },
   },
 });
 

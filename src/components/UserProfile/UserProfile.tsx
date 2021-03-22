@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, useLocation, useHistory, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectors } from 'features';
+import { useSelector, useDispatch } from 'react-redux';
+import { actions, selectors } from 'features';
+import { User } from 'features/users/types';
 import { State } from 'store';
 import { UserParams, LocationState } from './types';
 import {
@@ -30,23 +31,25 @@ function UserProfile() {
   const history = useHistory();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const user = useSelector((state: State) => selectors.user(state, id));
+  const dispatch = useDispatch();
 
   if (!user) {
     return <Redirect to="/" />;
   }
 
-  const from = location.state?.from;
-  function goBack() {
+  const goBack = () => {
+    const from = location.state?.from;
     history.push(from || '/');
-  }
+  };
 
-  function openDialog() {
-    setIsDialogOpen(true);
-  }
+  const openDialog = () => setIsDialogOpen(true);
 
-  function closeDialog() {
-    setIsDialogOpen(false);
-  }
+  const closeDialog = () => setIsDialogOpen(false);
+
+  const changeUserData = (data: User) => {
+    dispatch(actions.changeUserData({ ...user, ...data }));
+    closeDialog();
+  };
 
   const { name, mail, gender } = user;
 
@@ -88,7 +91,7 @@ function UserProfile() {
         <DialogTitle>Изменить данные пользователя</DialogTitle>
         <DialogContent>
           <Box pb={3}>
-            <UserForm initData={user} onSubmit={() => {}} />
+            <UserForm initData={user} onSubmit={changeUserData} />
           </Box>
         </DialogContent>
         <DialogActions>

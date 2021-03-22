@@ -31,20 +31,14 @@ function UsersList() {
   const filteredUsers = useSelector((state: State) => selectors.filteredUsers(state, filters));
   const dispatch = useDispatch();
 
-  function changeFilterValue(name: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (e: any) => {
-      setFilters((prev) => ({ ...prev, [name]: e.target.value }));
-    };
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const changeFilterValue = (name: string) => (e: any) => {
+    setFilters((prev) => ({ ...prev, [name]: e.target.value }));
+  };
 
-  function openDialog() {
-    setIsDialogOpen(true);
-  }
+  const openDialog = () => setIsDialogOpen(true);
 
-  function closeDialog() {
-    setIsDialogOpen(false);
-  }
+  const closeDialog = () => setIsDialogOpen(false);
 
   const addUser = (data: User) => {
     dispatch(actions.addUser(data));
