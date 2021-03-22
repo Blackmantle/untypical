@@ -28,13 +28,7 @@ function UserForm({ onSubmit, initData }: Props) {
           name="name"
           label="ФИО"
           error={!!errors.name}
-          inputRef={register({
-            ...sharedValidators,
-            maxLength: {
-              value: 100,
-              message: 'Максимум 100 символов!',
-            },
-          })}
+          inputRef={register(sharedValidators)}
           fullWidth
           autoFocus
         />

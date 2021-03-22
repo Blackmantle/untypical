@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { actions, selectors } from 'features';
 import { User, UserFilters } from 'features/users/types';
 import { State } from 'store';
+import { Link } from './styled';
 import {
   Box,
   FormControl,
@@ -11,7 +12,6 @@ import {
   Select,
   MenuItem,
   Button,
-  Link,
   IconButton,
   Tooltip,
   Divider,
@@ -115,8 +115,8 @@ function UsersList() {
               >
                 <Link
                   component={RouterLink}
-                  to={`/id${id}`}
-                  style={{ wordBreak: 'break-word' }}
+                  to={`/user/id${id}`}
+                  title={name}
                 >
                   {name}
                 </Link>
