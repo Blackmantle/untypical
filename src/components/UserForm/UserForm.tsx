@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import Props, { FormData } from './types';
+import { User } from 'features/users/types';
 import {
   Box,
   TextField,
@@ -11,27 +12,17 @@ import {
   MenuItem,
 } from '@material-ui/core';
 
-const initFormData: FormData = {
-  name: '',
-  mail: '',
-  gender: '',
-};
-
-function UserForm({ onSubmit, initData = initFormData }: Props) {
-  const { register, control, handleSubmit: submit, errors } = useForm({
+function UserForm({ onSubmit, initData }: Props) {
+  const { register, control, handleSubmit, errors } = useForm<User>({
     defaultValues: initData,
   });
-
-  function handleSubmit(data: FormData) {
-    onSubmit(data);
-  }
 
   const sharedValidators = {
     required: 'Обязательное поле!',
   };
 
   return (
-    <form id="userForm" onSubmit={submit(handleSubmit)}>
+    <form id="userForm" onSubmit={handleSubmit((data: FormData) => onSubmit(data))}>
       <Box>
         <TextField
           name="name"
@@ -70,6 +61,7 @@ function UserForm({ onSubmit, initData = initFormData }: Props) {
           <InputLabel id="gender-select-label">Пол</InputLabel>
           <Controller
             name="gender"
+            defaultValue=""
             control={control}
             rules={sharedValidators}
             as={(

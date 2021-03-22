@@ -2,8 +2,9 @@ import {
   createEntityAdapter,
   createSlice,
   PayloadAction,
+  createSelector,
 } from '@reduxjs/toolkit';
-import { User, UserData } from './types';
+import { User, UserData, UserFilters } from './types';
 import { State } from 'store';
 
 const UsersAdapter = createEntityAdapter<UserData>();
@@ -28,10 +29,29 @@ const usersSlice = createSlice({
 const usersSelectors = UsersAdapter.getSelectors((state: State) => state.users);
 const userSelector = usersSelectors.selectById;
 const usersSelector = usersSelectors.selectAll;
+const filteredUsersSelector = createSelector(
+  usersSelector,
+  (_: State, filters: UserFilters) => filters,
+  (users, filters) => (
+    Object.entries(filters).reduce((filteredUsers, [key, value]) => {
+      switch (key) {
+        case 'gender': {
+          if (value === 'all') {
+            return filteredUsers;
+          }
+          // @ts-ignore
+          return filteredUsers.filter((user) => user[key] === value);
+        }
+        default: return filteredUsers;
+      }
+    }, users)
+  ),
+);
 
 export const selectors = {
   user: userSelector,
   users: usersSelector,
+  filteredUsers: filteredUsersSelector,
 };
 
 export const { actions } = usersSlice;
